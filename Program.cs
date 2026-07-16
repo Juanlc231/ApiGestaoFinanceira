@@ -1,5 +1,4 @@
 using ApiGestaoFinanceira.Connection;
-using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
