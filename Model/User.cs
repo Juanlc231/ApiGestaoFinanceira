@@ -2,12 +2,13 @@
 
 namespace ApiGestaoFinanceira.Model
 {
-    [Table("Usuarios")]
+    [Table("Users")]
     public class User
     {
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
-        public string Senha { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty;
+        public string? ConfirmPassword { get; set; } = string.Empty;
     }
 }

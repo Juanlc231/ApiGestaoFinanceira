@@ -14,6 +14,6 @@ namespace ApiGestaoFinanceira.Connection
         protected override void OnConfiguring(DbContextOptionsBuilder options) =>
             options.UseSqlServer(_configuration.GetConnectionString("DefaultConnection"));
 
-        public DbSet<Model.User> Usuarios { get; set; }
+        public DbSet<Model.User> Users { get; set; }
     }
 }
