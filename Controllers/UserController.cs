@@ -1,31 +1,34 @@
 ﻿using ApiGestaoFinanceira.Service;
 using ApiGestaoFinanceira.Model;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ApiGestaoFinanceira.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/User")]
     public class UserController : ControllerBase
     {
         private readonly UserService _userService;
 
         public UserController(UserService userService) => _userService = userService;
 
+        [Authorize]
         [HttpGet("GetAllUsers")]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            var users = _userService.Get();
+            var users = await _userService.Get();
 
             return Ok(users);
         }
 
+        [Authorize]
         [HttpGet("GetUser")]
-        public IActionResult GetById(int id)
+        public async Task<IActionResult> GetById(int id)
         {
             try
             {
-                var user = _userService.GetById(id);
+                var user = await _userService.GetById(id);
 
                 return Ok(user);
             }
@@ -40,11 +43,11 @@ namespace ApiGestaoFinanceira.Controllers
         }
 
         [HttpPost("CreateUser")]
-        public IActionResult CreateUser([FromForm] User user)
+        public async Task<IActionResult> CreateUser([FromForm] User user)
         {
             try
             {
-                var createdUser = _userService.Insert(user);
+                User createdUser = await _userService.Insert(user);
 
                 return CreatedAtAction(nameof(GetById), new { id = createdUser.Id }, createdUser);
             }
@@ -54,9 +57,9 @@ namespace ApiGestaoFinanceira.Controllers
             }
         }
 
-
+        [Authorize]
         [HttpPost("UpdateUser")]
-        public IActionResult UpdateUser([FromForm] User user)
+        public async Task<IActionResult> UpdateUser([FromForm] User user)
         {
             try
             {
