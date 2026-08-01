@@ -1,4 +1,4 @@
-﻿namespace ApiGestaoFinanceira.Validate
+﻿namespace ApiGestaoFinanceira.Dto.Utils.Validate
 {
     public class PasswordValidate
     {

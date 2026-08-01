@@ -1,8 +1,7 @@
 ﻿using ApiGestaoFinanceira.Connection;
-using ApiGestaoFinanceira.Validate;
-using ApiGestaoFinanceira.Model;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Http.HttpResults;
+using ApiGestaoFinanceira.Dto.Model;
+using ApiGestaoFinanceira.Dto.Utils.Validate;
 
 namespace ApiGestaoFinanceira.Service
 {
@@ -45,8 +44,7 @@ namespace ApiGestaoFinanceira.Service
         public async Task<User> Insert(User user)
         {
             _userValidate.Validate(user);
-            user.Password = _passwordService.HashPassword(user.Password);
-
+            user.Password = _passwordService.PasswordHash(user.Password);
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 

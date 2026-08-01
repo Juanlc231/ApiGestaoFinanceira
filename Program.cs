@@ -45,6 +45,7 @@ builder.Services.AddDbContext<ConnectionContext>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<TokenService>();
 builder.Services.AddScoped<AuthenticationService>();
+builder.Services.AddScoped<ExpenseService>();
 
 var key = Encoding.ASCII.GetBytes(builder.Configuration["Api:Key"] ?? throw new InvalidOperationException("Chave da API não está configurada"));
 

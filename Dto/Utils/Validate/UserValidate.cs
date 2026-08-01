@@ -1,6 +1,6 @@
-﻿using ApiGestaoFinanceira.Model;
+﻿using ApiGestaoFinanceira.Dto.Model;
 
-namespace ApiGestaoFinanceira.Validate
+namespace ApiGestaoFinanceira.Dto.Utils.Validate
 {
     public class UserValidate
     {

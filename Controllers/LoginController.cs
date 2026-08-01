@@ -1,7 +1,6 @@
-﻿using ApiGestaoFinanceira.Service;
-using Microsoft.AspNetCore.Authorization;
+﻿using ApiGestaoFinanceira.Dto.Model;
+using ApiGestaoFinanceira.Service;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq.Expressions;
 
 namespace ApiGestaoFinanceira.Controllers
 {
@@ -19,13 +18,13 @@ namespace ApiGestaoFinanceira.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] string email, string password)
+        public async Task<IActionResult> Login([FromForm] LoginModel loginModel)
         {
             try {
-                if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
+                if (string.IsNullOrEmpty(loginModel.Email) || string.IsNullOrEmpty(loginModel.Password))
                     return BadRequest("Credenciais inválidas");
 
-                var user = await _authenticationService.Authenticate(email, password);
+                var user = await _authenticationService.Authenticate(loginModel.Email, loginModel.Password);
 
                 var token = _tokenService.GenerateToken(user);
                 return Ok(token);

@@ -1,5 +1,4 @@
-﻿using ApiGestaoFinanceira.Model;
-using Microsoft.EntityFrameworkCore;
+﻿using ApiGestaoFinanceira.Dto.Model;
 
 namespace ApiGestaoFinanceira.Service
 {

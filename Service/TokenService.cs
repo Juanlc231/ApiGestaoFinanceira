@@ -1,8 +1,8 @@
-﻿using ApiGestaoFinanceira.Model;
-using System.Text;
+﻿using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
+using ApiGestaoFinanceira.Dto.Model;
 
 namespace ApiGestaoFinanceira.Service
 {
@@ -24,7 +24,8 @@ namespace ApiGestaoFinanceira.Service
                 Subject = new ClaimsIdentity(new List<Claim>
                 {
                     new Claim("Id", user.Id.ToString()),
-                    new Claim(ClaimTypes.Email, user.Email)
+                    new Claim(ClaimTypes.Email, user.Email),
+                    new Claim(ClaimTypes.Role, user.Role.ToString())
                 }),
                 Expires = DateTime.UtcNow.AddHours(2),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)

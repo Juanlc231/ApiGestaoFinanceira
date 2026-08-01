@@ -1,7 +1,7 @@
 ﻿using ApiGestaoFinanceira.Service;
-using ApiGestaoFinanceira.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using ApiGestaoFinanceira.Dto.Model;
 
 namespace ApiGestaoFinanceira.Controllers
 {
@@ -13,7 +13,7 @@ namespace ApiGestaoFinanceira.Controllers
 
         public UserController(UserService userService) => _userService = userService;
 
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         [HttpGet("GetAllUsers")]
         public async Task<IActionResult> GetAll()
         {
@@ -22,8 +22,8 @@ namespace ApiGestaoFinanceira.Controllers
             return Ok(users);
         }
 
-        [Authorize]
-        [HttpGet("GetUser")]
+        [Authorize(Roles = "Admin")]
+        [HttpGet("GetUser/{id}")]
         public async Task<IActionResult> GetById(int id)
         {
             try
@@ -80,5 +80,7 @@ namespace ApiGestaoFinanceira.Controllers
                 return BadRequest(e.Message);
             }
         }
+
+        //add metodo de delete
     }
 }

@@ -5,12 +5,12 @@ namespace ApiGestaoFinanceira.Service
     public class PasswordService
     {
 
-        public string HashPassword(string password){
+        public string PasswordHash(string password){
 
             if (string.IsNullOrWhiteSpace(password))
                 throw new ArgumentException("Senha é obrigatória.");
 
-            string passwordHash = HashPassword(password);
+            var passwordHash = HashPassword(password);
 
             return passwordHash;
         }
