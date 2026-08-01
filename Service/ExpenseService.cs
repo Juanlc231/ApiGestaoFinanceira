@@ -15,9 +15,9 @@ namespace ApiGestaoFinanceira.Service
 
         public ExpenseService(ConnectionContext context) => _context = context;
 
-        public async Task<List<Expenses>> GetExpenses()
+        public async Task<List<Expenses>> GetExpenses(int idUser)
         {
-            var expenses = await _context.Expenses.ToListAsync();
+            var expenses = await _context.Expenses.Where(x => x.IdUser == idUser).ToListAsync();
             return expenses;
         }
 
