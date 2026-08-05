@@ -12,7 +12,7 @@ namespace ApiGestaoFinanceira.Dto.Utils.Validate
             if(expenses.IdUser == 0)
                 throw new ArgumentException("Id do usuário é necessário");
 
-            if (string.IsNullOrEmpty(expenses.Value))
+            if (expenses.Value < 0)
                 throw new ArgumentException("Valor da despesa é necessário");
 
             if (expenses.Date == DateTime.MinValue)

@@ -12,6 +12,8 @@
             Mercado = 5,
             Trasporte = 6,
             Saude = 7,
+            Investimentos = 8,
+            Outros = 9
         }
     }
 }
