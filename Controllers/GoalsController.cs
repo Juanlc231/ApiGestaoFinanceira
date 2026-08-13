@@ -16,13 +16,13 @@ namespace ApiGestaoFinanceira.Controllers
         public GoalsController(GoalsService goalsService) => _goalsService = goalsService;
 
         [HttpGet("GetAllGoals")]
-        public async Task<IActionResult> GetGoals()
+        public async Task<IActionResult> GetGoals(int page)
         {
             try 
             {
                 var idUser = int.Parse(User.FindFirst("Id")!.Value);
 
-                var goals = await _goalsService.GetGoals(idUser);
+                var goals = await _goalsService.GetGoals(idUser, page);
 
                 return Ok(goals);
             } 

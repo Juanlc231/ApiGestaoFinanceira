@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using ApiGestaoFinanceira.Dto.Model;
 using ApiGestaoFinanceira.Dto.Utils.Validate;
+using ApiGestaoFinanceira.Dto.ViewModel;
 
 namespace ApiGestaoFinanceira.Service
 {
@@ -14,11 +15,19 @@ namespace ApiGestaoFinanceira.Service
 
         public UserService(ConnectionContext context) => _context = context;
 
-        public async Task<List<User>> Get() 
+        public async Task<UserViewModel> Get(int page) 
         { 
-            var users = await _context.Users.ToListAsync();
+            var itens = await _context.Users.CountAsync();
 
-            return users;
+            var users = await _context.Users.
+                Skip((page - 1) * 10).
+                Take(10).ToListAsync();
+
+            return new UserViewModel
+            {
+                Users = users,
+                Page = (int)Math.Ceiling((double)itens / 10)
+            };
         }
 
         public async Task<User> GetById(int id) {

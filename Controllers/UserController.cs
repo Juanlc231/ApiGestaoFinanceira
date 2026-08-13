@@ -15,9 +15,9 @@ namespace ApiGestaoFinanceira.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpGet("GetAllUsers")]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll(int page)
         {
-            var users = await _userService.Get();
+            var users = await _userService.Get(page);
 
             return Ok(users);
         }
