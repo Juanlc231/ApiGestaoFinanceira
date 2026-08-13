@@ -16,11 +16,11 @@ namespace ApiGestaoFinanceira.Controllers
         public ExpenseController(ExpenseService expenseService) => _expenseService = expenseService;
 
         [HttpGet("GetAll")]
-        public async Task<IActionResult> GetAllExpenses()
+        public async Task<IActionResult> GetAllExpenses(int page)
         {
             var idUser = int.Parse(User.FindFirst("Id")!.Value);
 
-            var expenses = await _expenseService.GetExpenses(idUser);
+            var expenses = await _expenseService.GetExpenses(idUser, page);
             return Ok(expenses);
         }
 

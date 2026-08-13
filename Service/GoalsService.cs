@@ -14,14 +14,26 @@ namespace ApiGestaoFinanceira.Service
 
         public GoalsService(ConnectionContext context) => _context = context;
 
-        public async Task<List<Goals>> GetGoals(int idUser)
+        public async Task<ResultGoals> GetGoals(int idUser, int page)
         {
             if (idUser == 0)
                 throw new ArgumentNullException("id do usuario nao informado");
 
-            var goals = await _context.Goals.Where(x => x.IdUser == idUser).ToListAsync();
+            if (page == 0) 
+                throw new ArgumentNullException("pagina nao informada");
 
-            return goals;
+            var itens = await _context.Goals.CountAsync(x => x.IdUser == idUser);
+
+            var goals = await _context.Goals.Where(x => x.IdUser == idUser).
+                OrderBy(x => x.Id).
+                Skip((page - 1) * 10).
+                Take(10).ToListAsync();
+
+            return new ResultGoals 
+            { 
+                Goals = goals, 
+                Pages = (int)Math.Ceiling((double)itens / 10)
+            };
         }
 
         public async Task<Goals> GetGoalById(int id)
