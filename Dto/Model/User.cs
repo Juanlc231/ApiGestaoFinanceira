@@ -13,5 +13,7 @@ namespace ApiGestaoFinanceira.Dto.Model
         [NotMapped]
         public string ConfirmPassword { get; set; } = string.Empty;
         public EnumUser.RoleUser Role { get; set; } = EnumUser.RoleUser.User;
+        public int Attempts { get; set; } = 0;
+        public DateTime? BlockUntil { get; set; }
     }
 }
