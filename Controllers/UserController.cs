@@ -63,7 +63,7 @@ namespace ApiGestaoFinanceira.Controllers
         {
             try
             {
-                //var updatedUser = _userService.Update(user, id); adicionar o id como parâmetro se necessário pegando o usuario atual
+                var updatedUser = _userService.Update(user, user.Id);
 
                 return NoContent();
             }
@@ -81,6 +81,24 @@ namespace ApiGestaoFinanceira.Controllers
             }
         }
 
-        //add metodo de delete
+        [Authorize]
+        [HttpDelete("DeleteUser/{id}")]
+        public async Task<IActionResult> DeleteUser(int id)
+        {
+            try
+            {
+                await _userService.Delete(id);
+
+                return NoContent();
+            }
+            catch (ArgumentException e)
+            {
+                return BadRequest(e.Message);
+            }
+            catch (KeyNotFoundException e)
+            {
+                return NotFound(e.Message);
+            }
+        }
     }
 }

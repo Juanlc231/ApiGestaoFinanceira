@@ -52,8 +52,15 @@ namespace ApiGestaoFinanceira.Service
 
         public async Task<User> Insert(User user)
         {
+            var existingUser = await GetByEmail(user.Email);
+
+            if (existingUser != null)
+                throw new ArgumentException("Email já cadastrado.");
+
             _userValidate.Validate(user);
+
             user.Password = _passwordService.PasswordHash(user.Password);
+
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
@@ -68,15 +75,24 @@ namespace ApiGestaoFinanceira.Service
 
             user.Name = updatedUser.Name;
             user.Email = updatedUser.Email;
+            user.Attempts = updatedUser.Attempts;
+            user.BlockUntil = updatedUser.BlockUntil;
 
             await _context.SaveChangesAsync();
 
             return user.Id;
         }
 
+        public async Task Delete(int id)
+        {
+            var user = await GetById(id);
+            _context.Users.Remove(user);
+            await _context.SaveChangesAsync();
+        }
+
         public async Task ResetPassword(string email, string newPassword, string confirmNewPassword)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+            var user = await GetByEmail(email);
 
             if (user == null)
                 throw new KeyNotFoundException("Usuário não encontrado.");
