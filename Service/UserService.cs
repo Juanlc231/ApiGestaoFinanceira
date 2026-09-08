@@ -45,7 +45,7 @@ namespace ApiGestaoFinanceira.Service
             if (string.IsNullOrEmpty(email))
                 throw new ArgumentException("Email é obrigatório.");
 
-            User user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email) ?? throw new KeyNotFoundException("Usuário não encontrado.");
+            User user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email) ?? new User();
 
             return user;
         }
@@ -94,7 +94,7 @@ namespace ApiGestaoFinanceira.Service
         {
             var user = await GetByEmail(email);
 
-            if (user == null)
+            if (user == null || user.Id == 0)
                 throw new KeyNotFoundException("Usuário não encontrado.");
 
             _passwordValidate.Validate(newPassword, confirmNewPassword);

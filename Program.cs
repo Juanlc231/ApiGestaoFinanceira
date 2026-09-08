@@ -6,11 +6,11 @@ using Microsoft.OpenApi.Models;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+var key = Encoding.ASCII.GetBytes(builder.Configuration["Api:Key"] ?? throw new InvalidOperationException("Chave da API não está configurada"));
 
 // Add services to the container.
 
 builder.Services.AddControllers();
-
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -40,16 +40,13 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 });
-
 builder.Services.AddDbContext<ConnectionContext>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<TokenService>();
 builder.Services.AddScoped<AuthenticationService>();
 builder.Services.AddScoped<ExpenseService>();
 builder.Services.AddScoped<GoalsService>();
-
-var key = Encoding.ASCII.GetBytes(builder.Configuration["Api:Key"] ?? throw new InvalidOperationException("Chave da API não está configurada"));
-
+builder.Services.AddScoped<ResetPasswordService>();
 builder.Services.AddAuthentication(x =>
 {
     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -66,7 +63,6 @@ builder.Services.AddAuthentication(x =>
         ValidateAudience = false
     };
 });
-
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: "AllowFront", policy =>
@@ -89,10 +85,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors("AllowFront");
 app.UseHttpsRedirection();
-
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-
 app.Run();
