@@ -1,4 +1,5 @@
 ﻿using ApiGestaoFinanceira.Dto.Model;
+using ApiGestaoFinanceira.Dto.ViewModel;
 using ApiGestaoFinanceira.Service;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,7 +7,7 @@ namespace ApiGestaoFinanceira.Controllers
 {
     [ApiController]
     [Route("api/Login")]
-    public class LoginController: ControllerBase
+    public class LoginController : ControllerBase
     {
         private readonly TokenService _tokenService;
         private readonly AuthenticationService _authenticationService;
@@ -20,7 +21,8 @@ namespace ApiGestaoFinanceira.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromForm] LoginModel loginModel)
         {
-            try {
+            try
+            {
                 if (string.IsNullOrEmpty(loginModel.Email) || string.IsNullOrEmpty(loginModel.Password))
                     return BadRequest("Credenciais inválidas");
 
@@ -28,16 +30,37 @@ namespace ApiGestaoFinanceira.Controllers
 
                 var token = _tokenService.GenerateToken(user);
                 return Ok(token);
-            } 
-            catch (ArgumentException ex) {
+            }
+            catch (ArgumentException ex)
+            {
                 return BadRequest(ex.Message);
-            } 
-            catch (KeyNotFoundException ex) {
+            }
+            catch (KeyNotFoundException ex)
+            {
                 return NotFound(ex.Message);
             }
         }
 
-        //add metodo de reset senha
-        //add metodo de logout
+        [HttpPost("fogot-password")]
+        public async Task<IActionResult> ForgotPassword([FromForm] string email)
+        {
+            try
+            {
+                var result = await _authenticationService.ForgotPassword(email);
+
+                if (result)
+                    return Ok("Email de redefinição de senha enviado com sucesso.");
+                else
+                    return BadRequest("Erro ao solicitar redefinição de senha.");
+            }
+            catch (ArgumentException)
+            {
+                return BadRequest("Erro ao solicitar redefinição de senha.");
+            }
+            catch (Exception)
+            {
+                return BadRequest("Erro inesperado, espere alguns minutos e tente novamente.");
+            }
+        }
     }
 }

@@ -15,5 +15,6 @@ namespace ApiGestaoFinanceira.Connection
         public DbSet<User> Users { get; set; }
         public DbSet<Expenses> Expenses { get; set; }
         public DbSet<Goals> Goals { get; set; }
+        public DbSet<ResetPassword> ResetPasswords { get; set; }
     }
 }

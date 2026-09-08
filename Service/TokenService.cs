@@ -3,6 +3,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
 using ApiGestaoFinanceira.Dto.Model;
+using System.Security.Cryptography;
 
 namespace ApiGestaoFinanceira.Service
 {
@@ -35,6 +36,38 @@ namespace ApiGestaoFinanceira.Service
             var token = tokenHandler.CreateToken(confi);
 
             return tokenHandler.WriteToken(token);
+        }
+
+        public string GenerateTokenEmail(string email)
+        {
+            var value = _configuration["Api-Email-Key:Key"];
+
+            if (value == null)
+                throw new ArgumentNullException("Chave da API não está configurada");
+
+            var key = Encoding.UTF8.GetBytes(value);
+            var confi = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new List<Claim>
+                {
+                    new Claim(ClaimTypes.Email, email),
+                }),
+                Expires = DateTime.UtcNow.AddMinutes(5),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var token = tokenHandler.CreateToken(confi);
+
+            return tokenHandler.WriteToken(token);
+        }
+
+        public string GenerateTokenResetPassword()
+        {
+            var token = Convert.ToBase64String(RandomNumberGenerator.GetBytes(32));
+            token.Replace("+", "-").Replace("/", "_").Replace("=", "");
+
+            return token;
         }
     }
 }
